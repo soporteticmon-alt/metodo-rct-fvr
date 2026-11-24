@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Método RCT-FVR · Construgonp's</title>
+<meta name="description" content="Construye instrucciones profesionales para la inteligencia artificial con el método RCT-FVR: Rol, Contexto, Tarea, Formato, Validación y Restricciones.">
+<link rel="icon" type="image/png" href="assets/edificio.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Paleta tomada del logo: rojo #A01D21, rojo oscuro #761516, negro #000203, blanco */
+  --bg:#0d0a0a; --bg2:#151010; --card:#1b1414; --line:#33262a;
+  --red:#a01d21; --red2:#761516; --redhi:#c74b4b; --redtx:#ef5a5f;
+  --tx:#f4efef; --mut:#b5a7a8; --white:#ffffff; --ok:#5fd39b;
+  --L1:#a01d21; --L2:#f4efef; --L3:#761516; --L4:#c74b4b; --L5:#b9b2b3; --L6:#2a1e20;
+}
+:root[data-theme="light"]{
+  --bg:#f6f1f1; --bg2:#ffffff; --card:#ffffff; --line:#e3d6d7;
+  --tx:#1b1212; --mut:#6d5b5c; --redtx:#a01d21; --ok:#1d8a5a;
+  --L2:#1b1212; --L6:#1b1212;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:var(--bg);color:var(--tx);font-family:'Barlow',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;font-size:16px}
+a{color:inherit}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+h1,h2,h3,.disp{font-family:'Oswald','Impact',sans-serif;text-transform:uppercase;letter-spacing:.02em;font-weight:700}
+
+/* barra superior */
+.top{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);border-bottom:3px solid var(--red)}
+.top .in{display:flex;align-items:center;gap:12px;height:58px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand img{height:38px;width:auto}
+.brand b{font-family:'Oswald';font-size:18px;letter-spacing:.04em;text-transform:uppercase;line-height:1}
+.brand small{display:block;font-family:'Barlow';font-size:11px;color:var(--mut);letter-spacing:.05em;text-transform:uppercase;font-weight:500;margin-top:3px}
+.amer{height:34px;width:auto;margin-left:auto;flex:none}
+:root[data-theme="light"] .amer{background:#0d0a0a;padding:5px 9px;border-radius:4px;height:38px}
+.pisos{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--mut)}
+.pisos .st{display:flex;flex-direction:column-reverse;gap:2px;width:22px}
+.pisos .st i{height:4px;background:var(--line);border-radius:1px}
+.pisos .st i.on{background:var(--redhi)}
+.iconbtn{background:none;border:1px solid var(--line);color:var(--tx);width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:15px}
+.nav{display:flex;gap:6px;overflow-x:auto;padding:0 0 10px;scrollbar-width:none}
+.nav a{flex:none;font-size:12px;font-weight:600;text-decoration:none;padding:5px 13px;border:1px solid var(--line);border-radius:6px;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
+.nav a:hover,.nav a.on{color:#fff;background:var(--red);border-color:var(--red)}
+
+/* franja de carretera (motivo del logo) */
+.road{height:22px;background:#000203;position:relative;border-top:3px solid var(--tx);border-bottom:3px solid var(--tx)}
+:root[data-theme="light"] .road{border-color:#fff}
+.road::after{content:'';position:absolute;left:0;right:0;top:50%;height:3px;transform:translateY(-50%);background:repeating-linear-gradient(90deg,#fff 0 18px,transparent 18px 32px)}
+.stripes{display:grid;gap:5px}
+.stripes i{display:block;height:7px;background:#000203;border:1px solid var(--line)}
+.stripes i:nth-child(2){background:var(--red2);border-color:var(--red2);height:5px}
+
+/* portada */
+.hero{padding:48px 0 44px;background:
+  linear-gradient(180deg,transparent 60%,var(--bg) 100%),
+  repeating-linear-gradient(0deg,transparent 0 47px,rgba(255,255,255,.03) 47px 48px),
+  repeating-linear-gradient(90deg,transparent 0 47px,rgba(255,255,255,.03) 47px 48px),
+  radial-gradient(700px 360px at 90% 10%,rgba(160,29,33,.35),transparent 70%)}
+.hero .g{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
+@media(max-width:820px){.hero .g{grid-template-columns:1fr}}
+.tag{display:inline-block;background:var(--red);color:#fff;font-family:'Oswald';font-size:12px;letter-spacing:.12em;padding:5px 14px;text-transform:uppercase;font-weight:600}
+h1{font-size:clamp(34px,7vw,64px);line-height:1.02;margin:16px 0 14px}
+h1 em{font-style:normal;color:var(--redtx)}
+.lead{color:var(--mut);max-width:560px;font-size:17px}
+.logoplate{background:#fff;border-radius:6px;padding:20px;box-shadow:10px 10px 0 var(--red2)}
+.logoplate img{display:block;width:100%;height:auto}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0 8px}
+.btn{font:inherit;font-weight:600;font-size:14px;padding:10px 18px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--tx);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:.15s;text-transform:uppercase;letter-spacing:.04em}
+.btn:hover{border-color:var(--redhi);transform:translateY(-1px)}
+.btn.pri{background:var(--red);color:#fff;border-color:var(--red)}
+.btn.pri:hover{background:var(--redhi);border-color:var(--redhi)}
+.btn.sm{padding:6px 12px;font-size:12px}
+
+/* secciones */
+section{padding:48px 0}
+.kick{display:flex;align-items:center;gap:12px;color:var(--redtx);font-family:'Oswald';font-weight:600;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.kick .num{background:var(--red);color:#fff;min-width:32px;height:32px;display:grid;place-items:center;font-size:16px;letter-spacing:0;clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}
+h2{font-size:clamp(26px,4.4vw,40px);line-height:1.1;margin:10px 0 10px}
+.sub{color:var(--mut);max-width:680px;margin-bottom:24px}
+.grid{display:grid;gap:14px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--red);padding:18px}
+.card h3{font-size:17px;margin-bottom:6px}
+.card p{color:var(--mut);font-size:15px}
+.mono{font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+.q{background:var(--bg2);border:1px dashed var(--line);padding:12px 14px}
+.cmp .bad{border-left-color:#6b5b5c}
+.cmp .good{border-left-color:var(--redhi)}
+.pill{font-family:'Oswald';font-size:11px;letter-spacing:.1em;padding:2px 10px;margin-right:8px;vertical-align:2px;background:#6b5b5c;color:#fff}
+.good .pill{background:var(--red)}
+
+/* los 6 pisos */
+.torre{display:grid;gap:0;max-width:760px}
+.piso{display:grid;grid-template-columns:70px 1fr;gap:0;border:1px solid var(--line);margin-top:-1px;background:var(--card)}
+.piso .lt{display:grid;place-items:center;font-family:'Oswald';font-weight:700;font-size:34px;color:#fff;min-height:84px}
+.piso .tx{padding:12px 16px}
+.piso .tx h3{font-size:18px}
+.piso .tx h3 span{color:var(--mut);font-family:'Barlow';text-transform:none;font-weight:500;font-size:15px;letter-spacing:0}
+.piso .ex{margin-top:6px;font-size:13.5px;color:var(--mut)}
+.techo{max-width:760px;height:46px;background:var(--redhi);clip-path:polygon(0 100%,50% 0,100% 100%);margin-bottom:-1px;position:relative}
+.techo::after{content:'';position:absolute;inset:12px 0 0;background:var(--red);clip-path:polygon(0 100%,50% 0,100% 100%)}
+.piso .lt.l2{color:#a01d21}
+
+/* constructor */
+.builder{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:start}
+@media(max-width:900px){.builder{grid-template-columns:1fr}}
+.field{margin-bottom:12px}
+.field label{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;margin-bottom:4px;flex-wrap:wrap}
+.field label i{width:26px;height:26px;display:grid;place-items:center;font-style:normal;font-family:'Oswald';font-weight:700;color:#fff;font-size:15px}
+.field label small{color:var(--mut);font-weight:400}
+textarea{width:100%;font:inherit;font-size:14.5px;color:var(--tx);background:var(--bg2);border:1px solid var(--line);border-radius:4px;padding:10px 12px;resize:vertical;min-height:62px}
+textarea:focus{outline:2px solid var(--redhi);outline-offset:1px}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.chip{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--bg2);color:var(--tx);border-radius:4px;padding:6px 13px;cursor:pointer}
+.chip:hover{border-color:var(--redhi);color:var(--redtx)}
+.side{position:sticky;top:140px}
+.edif{display:flex;flex-direction:column;align-items:center;margin:4px 0 14px}
+.edif .roof{width:78%;height:34px;background:var(--line);clip-path:polygon(0 100%,50% 0,100% 100%);transition:.4s}
+.edif .roof.on{background:var(--redhi)}
+.edif .fl{width:78%;border:1px solid var(--line);margin-top:-1px;padding:7px 12px;display:flex;align-items:center;gap:10px;font-size:13px;background:var(--bg2);color:var(--mut);transition:.35s}
+.edif .fl b{font-family:'Oswald';width:34px;flex:none;white-space:nowrap}
+.edif .fl.on{background:var(--red);border-color:var(--redhi);color:#fff}
+.edif .fl.on b::after{content:' ✓'}
+.edif .ground{width:92%;height:8px;background:#000203;border:1px solid var(--line);margin-top:2px;position:relative}
+.edif .ground::after{content:'';position:absolute;left:0;right:0;top:50%;height:2px;background:repeating-linear-gradient(90deg,#fff 0 10px,transparent 10px 18px)}
+.pv{background:var(--bg2);border:1px solid var(--line);padding:14px;max-height:360px;overflow:auto}
+.pv .row{margin-bottom:8px}
+.pv .row b{display:inline-block;font-family:'Oswald';font-size:11px;letter-spacing:.08em;padding:1px 8px;color:#fff;margin-right:6px}
+.pv .empty{opacity:.45;font-style:italic}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+
+/* biblioteca */
+.lib{display:flex;flex-direction:column;gap:10px}
+details.p{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--red)}
+details.p summary{cursor:pointer;list-style:none;padding:14px 16px;font-weight:600;font-size:16px;display:flex;align-items:center;gap:10px}
+details.p summary::-webkit-details-marker{display:none}
+details.p summary::after{content:'+';margin-left:auto;color:var(--redtx);font-size:22px;line-height:1}
+details.p[open] summary::after{content:'–'}
+details.p .bd{padding:0 16px 16px}
+.tagc{font-family:'Oswald';font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--bg2);border:1px solid var(--line);color:var(--mut);padding:1px 9px}
+
+/* validación */
+.chk label{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;background:var(--card);border:1px solid var(--line);cursor:pointer;margin-bottom:8px;font-size:15px}
+.chk input{width:20px;height:20px;accent-color:var(--red);margin-top:3px;flex:none}
+.chk label:has(input:checked){border-color:var(--ok);background:color-mix(in srgb,var(--ok) 9%,var(--card))}
+.chk small{display:block;color:var(--mut);font-size:13.5px}
+.warn{display:flex;gap:12px;background:var(--card);border:1px solid var(--red);border-left:6px solid var(--red);padding:14px 16px;font-size:15px;margin-top:16px}
+.quote{font-family:'Oswald';text-transform:uppercase;font-size:clamp(20px,3.4vw,30px);line-height:1.25;max-width:800px;font-weight:600}
+.quote span{color:var(--redtx)}
+footer{padding:30px 0 60px;color:var(--mut);font-size:13.5px;background:#000203}
+:root[data-theme="light"] footer{background:#1b1212;color:#cbbcbc}
+footer .wrap{display:grid;gap:14px}
+footer .logos{display:flex;flex-wrap:wrap;align-items:center;gap:22px}
+footer .logos img.cg{height:54px;background:#fff;padding:6px 10px;border-radius:4px;width:fit-content}
+footer .logos img.am{height:42px;width:auto}
+footer .logos span{width:1px;height:40px;background:var(--line)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:var(--red);color:#fff;font-weight:700;font-size:14px;padding:10px 22px;transition:.3s;z-index:99}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media print{.top,.cta,.acts,.presets,.btn,.toast,.road{display:none!important}body{background:#fff;color:#000}.card,.pv{border-color:#999}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="in">
+      <a class="brand" href="#top"><img src="assets/edificio.png" alt=""><span><b>Método RCT-FVR</b><small>Construgonp's S.A.S.</small></span></a>
+      <img class="amer" src="assets/americana-blanco.png" alt="Corporación Universitaria Americana">
+      <div class="pisos"><span id="progTxt">0/6 pisos</span><div class="st" id="stk"></div></div>
+      <button class="iconbtn" id="themeBtn" title="Cambiar tema" aria-label="Cambiar tema claro u oscuro">◐</button>
+    </div>
+    <nav class="nav" id="nav">
+      <a href="#s0">Inicio</a><a href="#s1">Básico vs profesional</a><a href="#s2">Los 6 pisos</a>
+      <a href="#s3">Constructor</a><a href="#s4">Biblioteca</a><a href="#s5">Validación</a><a href="#s6">Mi plan</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<div class="hero"><div class="wrap g">
+  <div>
+    <span class="tag">Contabilidad + IA · Cuaderno de obra</span>
+    <h1>Construye prompts <em>de nivel profesional</em></h1>
+    <p class="lead">Un prompt bien hecho se levanta como un edificio: por pisos. Con el método <b>RCT-FVR</b> armas, en seis pasos, una instrucción clara, verificable y con límites para ChatGPT, Claude, Gemini o Copilot.</p>
+    <div class="cta">
+      <a class="btn pri" href="#s3">Construir mi prompt →</a>
+      <a class="btn" href="#s2">Ver el método</a>
+    </div>
+  </div>
+  <div class="logoplate"><img src="assets/logo.jpg" alt="Logo de Construgonp's S.A.S."></div>
+</div></div>
+<div class="road" aria-hidden="true"></div>
+
+<section id="s0"><div class="wrap">
+  <div class="kick"><span class="num">0</span>Antes de empezar</div>
+  <h2>Cómo funciona este cuaderno</h2>
+  <p class="sub">Todo se guarda en tu propio navegador. No se envía ningún dato a ningún servidor.</p>
+  <div class="grid g3">
+    <div class="card"><h3>1 · Entiende los 6 pisos</h3><p>Rol, Contexto, Tarea, Formato, Validación y Restricciones. Cada piso responde una pregunta.</p></div>
+    <div class="card"><h3>2 · Levanta tu prompt</h3><p>Responde las seis preguntas y el cuaderno ensambla la instrucción completa, lista para copiar.</p></div>
+    <div class="card"><h3>3 · Revisa la obra</h3><p>La IA propone, tú decides. Usa la lista de validación antes de confiar en una cifra.</p></div>
+  </div>
+  <div class="grid g3" style="margin-top:14px">
+    <div class="card"><h3>Copiloto, no piloto</h3><p>La IA acelera el trabajo; el criterio profesional sigue siendo humano.</p></div>
+    <div class="card"><h3>Verifica antes de actuar</h3><p>Concilia cifras, fórmulas y normas contra tus soportes y la ley vigente.</p></div>
+    <div class="card"><h3>Cuida tus datos</h3><p>No pegues NIT de clientes, contraseñas ni información bancaria real en una IA pública.</p></div>
+  </div>
+</div></section>
+
+<section id="s1"><div class="wrap">
+  <div class="kick"><span class="num">1</span>La diferencia</div>
+  <h2>Prompt básico frente a profesional</h2>
+  <p class="sub">La calidad de la instrucción orienta la calidad de la respuesta. El mismo pedido, escrito de dos maneras.</p>
+  <div class="grid g2 cmp">
+    <div class="card bad"><h3><span class="pill">BÁSICO</span>Lo que casi todos escriben</h3>
+      <div class="q mono">Analízame estos estados financieros.</div>
+      <p style="margin-top:10px">Respuesta genérica: la IA no sabe tu sector, qué comparar, cómo presentarlo ni qué no debe inventar.</p></div>
+    <div class="card good"><h3><span class="pill">PROFESIONAL</span>Con el método RCT-FVR</h3>
+      <div class="q mono">Actúa como analista financiero de empresas constructoras colombianas. Compara 2024 y 2025, calcula e interpreta razón corriente, margen bruto y endeudamiento. Preséntalo en tablas con la fórmula usada y recomendaciones. Valida las cifras contra el balance; si algo no cuadra, dilo. No inventes datos.</div>
+      <p style="margin-top:10px">Respuesta enfocada, con fórmulas visibles y alertas cuando algo no concilia.</p></div>
+  </div>
+</div></section>
+<div class="road" aria-hidden="true"></div>
+
+<section id="s2"><div class="wrap">
+  <div class="kick"><span class="num">2</span>El método</div>
+  <h2>RCT-FVR: seis pisos, seis preguntas</h2>
+  <p class="sub">Método didáctico para construir instrucciones profesionales para la inteligencia artificial. Responde cada pregunta y tu prompt queda completo.</p>
+  <div class="techo" aria-hidden="true"></div>
+  <div class="torre" id="torre"></div>
+</div></section>
+
+<section id="s3"><div class="wrap">
+  <div class="kick"><span class="num">3</span>Constructor</div>
+  <h2>Levanta tu prompt</h2>
+  <p class="sub">Escribe en cada recuadro o carga un ejemplo para ver cómo se llena. A la derecha crece tu edificio: cada piso completo lo ilumina.</p>
+  <div class="presets" id="presets"></div>
+  <div class="builder">
+    <div id="fields"></div>
+    <div class="side">
+      <div class="card">
+        <h3>Tu edificio</h3>
+        <div class="edif" id="edif"></div>
+        <small id="meterTxt" style="color:var(--mut)"></small>
+        <h3 style="margin-top:14px;font-size:15px">Tu prompt listo</h3>
+        <div class="pv mono" id="pv" style="margin-top:8px"></div>
+        <div class="acts">
+          <button class="btn pri" id="copyBtn">Copiar prompt</button>
+          <a class="btn" id="gptBtn" target="_blank" rel="noopener">ChatGPT ↗</a>
+          <a class="btn" id="clBtn" target="_blank" rel="noopener">Claude ↗</a>
+          <button class="btn sm" id="clearBtn">Borrar</button>
+        </div>
+        <small style="color:var(--mut);display:block;margin-top:10px">ChatGPT y Claude se abren con tu prompt ya escrito. Si no aparece, pégalo: ya quedó copiado.</small>
+      </div>
+    </div>
+  </div>
+</div></section>
+<div class="road" aria-hidden="true"></div>
+
+<section id="s4"><div class="wrap">
+  <div class="kick"><span class="num">4</span>Biblioteca</div>
+  <h2>Prompts financieros listos para usar</h2>
+  <p class="sub">Ocho instrucciones ya armadas con el método. Cambia los datos por los de tu empresa. Cópialas tal cual o edítalas en el constructor.</p>
+  <div class="lib" id="lib"></div>
+</div></section>
+
+<section id="s5"><div class="wrap">
+  <div class="kick"><span class="num">5</span>Validación</div>
+  <h2>¿Podemos confiar ciegamente en la IA?</h2>
+  <p class="sub">No. Una cifra puede parecer correcta y no serlo. Antes de usar un resultado en una decisión, recórrelo con esta lista.</p>
+  <div class="chk" id="chk"></div>
+  <div class="warn"><span class="disp" style="font-size:28px;color:var(--redtx)">!</span><div><b>Por qué validar.</b> Una IA puede reportar la «ganancia continuada» como si fuera la utilidad neta, sin separar la reserva legal. La cifra existe en el documento, pero no es la que necesitas. Concilia con las notas a los estados financieros y con el profesional responsable.</div></div>
+</div></section>
+<div class="road" aria-hidden="true"></div>
+
+<section id="s6"><div class="wrap">
+  <div class="kick"><span class="num">6</span>Mi plan</div>
+  <h2>Llévate tu trabajo</h2>
+  <p class="sub">Descarga tu prompt y tu lista de validación, o imprímelos.</p>
+  <div class="acts" style="margin:0 0 34px">
+    <button class="btn pri" id="dlBtn">Descargar mi prompt (.txt)</button>
+    <button class="btn" onclick="window.print()">Imprimir o guardar PDF</button>
+    <button class="btn" id="resetBtn">Empezar de cero</button>
+  </div>
+  <p class="quote">El contador del pasado registraba lo que sucedía, el del presente interpreta lo que sucede y el del futuro usará la tecnología <span>para anticiparse</span>. La IA es la herramienta; el criterio y la ética siguen siendo humanos.</p>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div class="logos"><img class="cg" src="assets/logo.jpg" alt="Construgonp's S.A.S."><span></span><img class="am" src="assets/americana-blanco.png" alt="Corporación Universitaria Americana"></div>
+  <div class="stripes" style="max-width:260px"><i></i><i></i><i></i></div>
+  <div>Cuaderno educativo del método RCT-FVR. Las cifras de los ejemplos son ilustrativas y de una empresa ficticia. Revisa siempre los resultados de la IA con tus soportes y con la normativa vigente. Tus datos se guardan solo en este navegador.</div>
+</div></footer>
+<div class="toast" id="toast">Copiado</div>
+
+<script>
+const LETTERS=[
+ {k:'rol',l:'R',n:'Rol',q:'¿Qué profesional debe representar la IA?',col:'--L1',ph:'Ej.: Analista financiero senior de empresas constructoras colombianas.',ex:'Actúa como contador público con experiencia en NIIF para pymes.'},
+ {k:'contexto',l:'C',n:'Contexto',q:'¿Cuál es la situación empresarial?',col:'--L3',ph:'Ej.: Constructora mediana en Colombia. Tengo el balance y el estado de resultados 2024 y 2025.',ex:'Empresa de construcción, ingresos 2025 de $435 M, margen en descenso.'},
+ {k:'tarea',l:'T',n:'Tarea',q:'¿Qué debe realizar?',col:'--L4',ph:'Ej.: Comparar 2024 y 2025, calcular razón corriente, margen bruto y endeudamiento, e interpretarlos.',ex:'Usa un verbo claro: extraer, calcular, comparar, interpretar, recomendar.'},
+ {k:'formato',l:'F',n:'Formato',q:'¿Cómo debe entregar los resultados?',col:'--L1',ph:'Ej.: Tabla con la fórmula usada, resultado y lectura; luego 3 recomendaciones en viñetas.',ex:'Tablas, viñetas, máximo una página, lenguaje para gerencia.'},
+ {k:'validacion',l:'V',n:'Validación',q:'¿Cómo debe verificar la información?',col:'--L3',ph:'Ej.: Comprobar que Activos = Pasivos + Patrimonio y mostrar la cifra fuente de cada cálculo.',ex:'Si una cifra no cuadra o falta, debe decirlo en lugar de suponer.'},
+ {k:'restricciones',l:'R',n:'Restricciones',q:'¿Qué límites debe respetar?',col:'--L4',ph:'Ej.: No inventar datos. No dar asesoría tributaria. Usar solo las cifras que te entrego.',ex:'Sin inventar información; solo los datos suministrados; en español.'}
+];
+const PRESETS=[
+ {n:'Análisis de estados financieros',d:{rol:'Actúa como analista financiero senior especializado en empresas constructoras colombianas.',contexto:'Constructora mediana (empresa ficticia de ejemplo). Te entrego el balance general y el estado de resultados de 2024 y 2025. Los ingresos bajaron mientras los activos subieron.',tarea:'Compara 2024 con 2025. Calcula análisis horizontal y vertical, razón corriente, margen bruto y endeudamiento. Interpreta qué cambió y por qué podría importar.',formato:'Una tabla por tema con: indicador, fórmula, 2024, 2025, variación y lectura. Cierra con 3 recomendaciones para la gerencia en viñetas.',validacion:'Verifica que Activos = Pasivos + Patrimonio. Muestra de dónde sale cada cifra. Si algo no cuadra o falta, dímelo antes de calcular.',restricciones:'No inventes datos ni supongas cifras. Usa solo lo que te entrego. No des asesoría tributaria. Responde en español claro.'}},
+ {n:'Dashboard financiero',d:{rol:'Actúa como analista de datos y desarrollador de visualizaciones financieras.',contexto:'Soy contador de una empresa y quiero presentar a la gerencia los resultados de 2025 frente a 2024. Te pego las cifras principales.',tarea:'Diseña un dashboard con tarjetas de indicadores, gráficos y filtros por año. Incluye análisis horizontal y vertical, y alertas justificadas.',formato:'Entrega un archivo HTML funcional en un solo bloque de código, y aparte el modelo de datos y las medidas DAX para Power BI.',validacion:'Cada indicador debe mostrar su fórmula en una nota. Revisa que los totales del dashboard coincidan con las cifras que te di.',restricciones:'No inventes cifras: si falta un dato, deja el espacio vacío. Colores sobrios, accesibles y sin librerías de pago.'}},
+ {n:'Conciliar datos de un PDF',d:{rol:'Actúa como auxiliar contable meticuloso.',contexto:'Tengo un PDF con estados financieros. Quiero pasarlos a una tabla antes de analizarlos.',tarea:'Extrae las cuentas y los valores de 2024 y 2025 y concilia que los subtotales y totales sumen correctamente.',formato:'Tabla con columnas: cuenta, 2024, 2025, ¿cuadra? (sí/no). Al final, lista de diferencias encontradas.',validacion:'Recalcula cada subtotal y compáralo con el del documento. Marca como «por revisar» cualquier valor que no puedas leer con seguridad.',restricciones:'No corrijas cifras por tu cuenta. Si dudas de una lectura, pregúntame. No agregues cuentas que no estén en el documento.'}}
+];
+const LIB=[
+ {t:'Análisis horizontal y vertical',g:'Análisis',d:PRESETS[0].d},
+ {t:'Dashboard financiero (HTML + DAX)',g:'Visualización',d:PRESETS[1].d},
+ {t:'Conciliar datos extraídos de un PDF',g:'Control',d:PRESETS[2].d},
+ {t:'Indicadores de liquidez y endeudamiento',g:'Indicadores',d:{rol:'Actúa como analista financiero con enfoque en riesgo de liquidez.',contexto:'Una pyme del sector construcción. Te doy activo corriente, pasivo corriente, inventarios, pasivos totales y activos totales de dos años.',tarea:'Calcula razón corriente, prueba ácida y endeudamiento para cada año, compara y explica qué significan para la salud de la empresa.',formato:'Tabla con indicador, fórmula, valor por año y semáforo (verde, amarillo, rojo) con una frase de lectura.',validacion:'Muestra el cálculo paso a paso para que yo pueda repetirlo en una hoja de cálculo.',restricciones:'No uses rangos de referencia que no puedas justificar. Si usas un umbral, di de dónde sale. No inventes datos.'}},
+ {t:'Costos y rentabilidad por obra',g:'Costos',d:{rol:'Actúa como contador de costos para empresas de construcción.',contexto:'Tengo ingresos y costos de 4 obras durante el año. Algunas dejaron menos margen de lo esperado.',tarea:'Calcula margen bruto por obra, identifica las de menor rentabilidad y propón qué costos revisar primero.',formato:'Tabla ordenada de menor a mayor margen, y debajo una lista de preguntas que debo hacerle a cada director de obra.',validacion:'Comprueba que la suma de las obras coincida con el total que te di. Señala costos que parezcan atípicos.',restricciones:'No concluyas causas como si fueran hechos: preséntalas como hipótesis por verificar.'}},
+ {t:'Cartera y flujo de caja',g:'Liquidez',d:{rol:'Actúa como asesor de tesorería para una empresa de servicios.',contexto:'Tengo el listado de cuentas por cobrar por antigüedad y mis pagos fijos de los próximos 3 meses.',tarea:'Clasifica la cartera por edades, estima qué parte podría entrar este trimestre y proyecta si habrá faltante de caja.',formato:'Tabla de cartera por rangos, flujo de caja mensual y un párrafo de alerta si algún mes queda negativo.',validacion:'Indica los supuestos de recaudo que usaste para que yo pueda cambiarlos.',restricciones:'No supongas recaudos del 100%. No inventes clientes ni fechas. Mantén los supuestos visibles.'}},
+ {t:'Informe para la gerencia',g:'Comunicación',d:{rol:'Actúa como contador que le explica los números a un gerente que no es financiero.',contexto:'Debo presentar mañana los resultados del trimestre. Tengo una tabla de indicadores y mis notas.',tarea:'Convierte los indicadores en un resumen ejecutivo que diga qué pasó, por qué importa y qué decisión sugiere.',formato:'Máximo 250 palabras, con título, 3 hallazgos y 2 decisiones recomendadas. Sin jerga técnica.',validacion:'Cada hallazgo debe citar la cifra que lo respalda. Marca con [verificar] lo que sea una interpretación.',restricciones:'No exageres ni suavices los resultados. No uses cifras que no estén en mi tabla.'}},
+ {t:'Conciliar utilidad y reservas',g:'Control',d:{rol:'Actúa como revisor fiscal junior que cuestiona antes de aprobar.',contexto:'La IA me entregó una «utilidad» pero no sé si ya descuenta la reserva legal ni los impuestos. Te doy el estado de resultados y las notas.',tarea:'Identifica qué cifra es utilidad antes de impuestos, utilidad neta y base de reserva legal, y explica cualquier diferencia entre ellas.',formato:'Tabla de conciliación: concepto, cifra, dónde aparece en los documentos, observación.',validacion:'Si dos cifras parecen la misma pero difieren, explícalo. Dime qué pregunta le haría yo al contador responsable.',restricciones:'No des la cifra por buena sin rastrearla. No inventes notas ni porcentajes.'}}
+];
+const CHECK=[
+ ['¿La cifra aparece en mi documento fuente?','Búscala tú mismo; no basta con que la IA la cite.'],
+ ['¿Recalculé al menos un resultado en una hoja de cálculo?','Una fórmula o un total por cada tabla.'],
+ ['¿Cuadran los totales? (Activos = Pasivos + Patrimonio)','Si no cuadra, el problema suele estar en la lectura de los datos.'],
+ ['¿La IA dijo qué supuestos usó?','Los supuestos ocultos son la fuente más común de errores.'],
+ ['¿Hay datos inventados o completados por la IA?','Pídele que marque lo que no estaba en tus datos.'],
+ ['¿Una persona responsable revisó la conclusión?','El profesional firma; la IA no.'],
+ ['¿Evité compartir datos sensibles?','Sin NIT reales, cuentas bancarias ni contraseñas.']
+];
+const $=s=>document.querySelector(s);
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const store={get(k,d){try{const v=localStorage.getItem('rctfvr_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('rctfvr_'+k,JSON.stringify(v))}catch(e){}}};
+let data=store.get('data',{}), checks=store.get('checks',{}), visited=store.get('visited',{});
+
+// los 6 pisos (de arriba hacia abajo: Restricciones ... Rol en la base)
+$('#torre').innerHTML=[...LETTERS].reverse().map(x=>`<div class="piso"><div class="lt ${x.col=='--L2'?'l2':''}" style="background:var(${x.col})">${x.l}</div><div class="tx"><h3>${x.n} <span>· ${x.q}</span></h3><div class="ex">${x.ex}</div></div></div>`).join('');
+$('#fields').innerHTML=LETTERS.map(x=>`<div class="field"><label for="f_${x.k}"><i style="background:var(${x.col})">${x.l}</i>${x.n} <small>${x.q}</small></label><textarea id="f_${x.k}" rows="3" placeholder="${x.ph}"></textarea></div>`).join('');
+LETTERS.forEach(x=>{const el=$('#f_'+x.k);el.value=data[x.k]||'';el.addEventListener('input',()=>{data[x.k]=el.value;store.set('data',data);render()})});
+$('#presets').innerHTML=PRESETS.map((p,i)=>`<button class="chip" data-i="${i}">${p.n}</button>`).join('');
+$('#presets').addEventListener('click',e=>{const b=e.target.closest('.chip');if(b)load(PRESETS[+b.dataset.i].d)});
+function load(d){data={...d};LETTERS.forEach(x=>$('#f_'+x.k).value=data[x.k]||'');store.set('data',data);render();location.hash='#s3'}
+const filled=x=>(data[x.k]||'').trim();
+function build(){return LETTERS.filter(filled).map(x=>`${x.n.toUpperCase()}: ${data[x.k].trim()}`).join('\n\n')}
+function render(){
+  const n=LETTERS.filter(filled).length;
+  $('#edif').innerHTML=`<div class="roof ${n==6?'on':''}"></div>`+[...LETTERS].reverse().map(x=>`<div class="fl ${filled(x)?'on':''}"><b>${x.l}</b>${x.n}</div>`).join('')+'<div class="ground"></div>';
+  $('#meterTxt').textContent=n==6?'Edificio terminado: método completo.':`${n} de 6 pisos levantados`;
+  $('#pv').innerHTML=LETTERS.map(x=>`<div class="row"><b style="background:var(${x.col})">${x.n.toUpperCase()}</b>${filled(x)?`<span>${esc(data[x.k].trim())}</span>`:'<span class="empty">pendiente</span>'}</div>`).join('');
+  const p=build(),enc=encodeURIComponent(p);
+  $('#gptBtn').href=p?'https://chatgpt.com/?q='+enc:'https://chatgpt.com/';
+  $('#clBtn').href=p?'https://claude.ai/new?q='+enc:'https://claude.ai/new';
+  progress();
+}
+function toast(m){const t=$('#toast');t.textContent=m||'Copiado';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
+async function copy(txt){try{await navigator.clipboard.writeText(txt)}catch(e){const a=document.createElement('textarea');a.value=txt;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}toast()}
+$('#copyBtn').onclick=()=>{const p=build();p?copy(p):toast('Escribe al menos un piso')};
+['#gptBtn','#clBtn'].forEach(s=>$(s).addEventListener('click',()=>{const p=build();if(p)copy(p)}));
+$('#clearBtn').onclick=()=>{data={};LETTERS.forEach(x=>$('#f_'+x.k).value='');store.set('data',data);render()};
+const ptxt=d=>LETTERS.map(x=>`${x.n.toUpperCase()}: ${d[x.k]}`).join('\n\n');
+$('#lib').innerHTML=LIB.map((p,i)=>`<details class="p"><summary>${p.t} <span class="tagc">${p.g}</span></summary><div class="bd"><div class="pv mono">${LETTERS.map(x=>`<div class="row"><b style="background:var(${x.col})">${x.n.toUpperCase()}</b>${esc(p.d[x.k])}</div>`).join('')}</div><div class="acts"><button class="btn pri sm" data-c="${i}">Copiar</button><button class="btn sm" data-l="${i}">Editar en el constructor</button></div></div></details>`).join('');
+$('#lib').addEventListener('click',e=>{const c=e.target.closest('[data-c]'),l=e.target.closest('[data-l]');if(c)copy(ptxt(LIB[+c.dataset.c].d));if(l)load(LIB[+l.dataset.l].d)});
+$('#chk').innerHTML=CHECK.map((c,i)=>`<label><input type="checkbox" data-i="${i}" ${checks[i]?'checked':''}><span>${c[0]}<small>${c[1]}</small></span></label>`).join('');
+$('#chk').addEventListener('change',e=>{checks[e.target.dataset.i]=e.target.checked;store.set('checks',checks);progress()});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){visited[e.target.id]=1;store.set('visited',visited);progress();document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}}),{threshold:.35});
+document.querySelectorAll('section').forEach(s=>io.observe(s));
+function progress(){
+  let n=0;
+  if(visited.s1)n++; if(visited.s2)n++;
+  if(LETTERS.filter(filled).length==6)n++;
+  if(visited.s4)n++;
+  if(Object.values(checks).filter(Boolean).length>=5)n++;
+  if(visited.s6)n++;
+  $('#progTxt').textContent=n+'/6 pisos';
+  $('#stk').innerHTML=Array.from({length:6},(_,i)=>`<i class="${i<n?'on':''}"></i>`).join('');
+}
+$('#dlBtn').onclick=()=>{
+  const done=CHECK.filter((c,i)=>checks[i]).map(c=>'[x] '+c[0]),pend=CHECK.filter((c,i)=>!checks[i]).map(c=>'[ ] '+c[0]);
+  const t='MI PROMPT (MÉTODO RCT-FVR)\n===========================\n\n'+(build()||'(aún vacío)')+'\n\n\nLISTA DE VALIDACIÓN\n-------------------\n'+[...done,...pend].join('\n')+'\n';
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/plain;charset=utf-8'}));a.download='mi-prompt-rct-fvr.txt';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)};
+$('#resetBtn').onclick=()=>{if(!confirm('¿Borrar tu prompt y tu avance en este navegador?'))return;['data','checks','visited'].forEach(k=>store.set(k,{}));location.reload()};
+function setTheme(t){document.documentElement.dataset.theme=t;store.set('tema',t)}
+$('#themeBtn').onclick=()=>setTheme(document.documentElement.dataset.theme==='light'?'dark':'light');
+setTheme(store.get('tema','dark'));
+render();
+</script>
+</body>
+</html>
