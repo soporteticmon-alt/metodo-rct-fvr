@@ -162,6 +162,17 @@ footer .logos img.am{height:42px;width:auto}
 footer .logos span{width:1px;height:40px;background:var(--line)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:var(--red);color:#fff;font-weight:700;font-size:14px;padding:10px 22px;transition:.3s;z-index:99}
 .toast.show{transform:translateX(-50%) translateY(0)}
+@media(max-width:620px){
+  .top .in{gap:8px}
+  .brand img{height:30px}
+  .brand b{font-size:16px;white-space:nowrap}
+  .brand small{display:none}
+  .pisos{display:none}
+  .amer{height:26px;margin-left:auto}
+  :root[data-theme="light"] .amer{height:30px;padding:4px 7px}
+  .iconbtn{width:32px;height:32px}
+  .lead{font-size:16px}
+}
 @media print{.top,.cta,.acts,.presets,.btn,.toast,.road{display:none!important}body{background:#fff;color:#000}.card,.pv{border-color:#999}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
